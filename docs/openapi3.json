@@ -2,7 +2,7 @@
   "openapi": "3.0.1",
   "info": {
     "title": "ppa-intermediary-api",
-    "version": "2025-04-03 08:11:06UTC"
+    "version": "2025-04-01 10:20:18UTC"
   },
   "servers": [
     {
@@ -22,32 +22,11 @@
             "description": "Default response for GET /pharmacies"
           }
         },
-        "security": [
-          {
-            "NCPDPUserAppAutnorizer": []
-          }
-        ],
         "x-amazon-apigateway-integration": {
           "payloadFormatVersion": "2.0",
           "type": "aws_proxy",
           "httpMethod": "POST",
           "uri": "arn:aws:apigateway:us-east-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-2:478698886511:function:PPAForwarderFunction/invocations",
-          "connectionType": "INTERNET"
-        }
-      }
-    },
-    "/AuthService": {
-      "post": {
-        "responses": {
-          "default": {
-            "description": "Default response for POST /AuthService"
-          }
-        },
-        "x-amazon-apigateway-integration": {
-          "payloadFormatVersion": "2.0",
-          "type": "aws_proxy",
-          "httpMethod": "POST",
-          "uri": "arn:aws:apigateway:us-east-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-2:478698886511:function:AuthService/invocations",
           "connectionType": "INTERNET"
         }
       }
@@ -59,11 +38,6 @@
             "description": "Default response for POST /pharmacies/add"
           }
         },
-        "security": [
-          {
-            "NCPDPUserAppAutnorizer": []
-          }
-        ],
         "x-amazon-apigateway-integration": {
           "payloadFormatVersion": "2.0",
           "type": "aws_proxy",
@@ -115,11 +89,6 @@
             "description": "Default response for POST /pharmacies/delete"
           }
         },
-        "security": [
-          {
-            "NCPDPUserAppAutnorizer": []
-          }
-        ],
         "x-amazon-apigateway-integration": {
           "payloadFormatVersion": "2.0",
           "type": "aws_proxy",
@@ -153,11 +122,6 @@
             "description": "Default response for POST /pharmacies/edit"
           }
         },
-        "security": [
-          {
-            "NCPDPUserAppAutnorizer": []
-          }
-        ],
         "x-amazon-apigateway-integration": {
           "payloadFormatVersion": "2.0",
           "type": "aws_proxy",
@@ -209,11 +173,6 @@
             "description": "Default response for POST /pharmacies/search"
           }
         },
-        "security": [
-          {
-            "NCPDPUserAppAutnorizer": []
-          }
-        ],
         "x-amazon-apigateway-integration": {
           "payloadFormatVersion": "2.0",
           "type": "aws_proxy",
@@ -247,11 +206,6 @@
             "description": "Default response for POST /ppa/request"
           }
         },
-        "security": [
-          {
-            "NCPDPUserAppAutnorizer": []
-          }
-        ],
         "x-amazon-apigateway-integration": {
           "payloadFormatVersion": "2.0",
           "type": "aws_proxy",
@@ -288,11 +242,6 @@
             "description": "Default response for POST /ppa/requestDemo"
           }
         },
-        "security": [
-          {
-            "NCPDPUserAppAutnorizer": []
-          }
-        ],
         "x-amazon-apigateway-integration": {
           "payloadFormatVersion": "2.0",
           "type": "aws_proxy",
@@ -319,45 +268,6 @@
               }
             }
           }
-        }
-      }
-    },
-    "/ppa/requestDemoMany": {
-      "post": {
-        "responses": {
-          "default": {
-            "description": "Default response for POST /ppa/requestDemoMany"
-          }
-        },
-        "security": [
-          {
-            "NCPDPUserAppAutnorizer": []
-          }
-        ],
-        "x-amazon-apigateway-integration": {
-          "payloadFormatVersion": "2.0",
-          "type": "aws_proxy",
-          "httpMethod": "POST",
-          "uri": "arn:aws:apigateway:us-east-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-2:478698886511:function:PPAForwarderFunction/invocations",
-          "connectionType": "INTERNET"
-        }
-      }
-    }
-  },
-  "components": {
-    "securitySchemes": {
-      "NCPDPUserAppAutnorizer": {
-        "type": "oauth2",
-        "flows": {},
-        "x-amazon-apigateway-authorizer": {
-          "identitySource": "$request.header.Authorization",
-          "jwtConfiguration": {
-            "audience": [
-              "2m1cstovhvf2to2cau986rf4p6"
-            ],
-            "issuer": "https://cognito-idp.us-east-2.amazonaws.com/us-east-2_4dTuIRf9m"
-          },
-          "type": "jwt"
         }
       }
     }
