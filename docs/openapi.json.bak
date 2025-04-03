@@ -18,9 +18,36 @@
     "/pharmacies": {
       "get": {
         "responses": {
-          "default": {
-            "description": "Default response for GET /pharmacies"
-          }
+          "200": {
+			  "description": "Successful response with list of pharmacies",
+			  "content": {
+				"application/json": {
+				  "schema": {
+					"type": "array",
+					"items": {
+					  "type": "object",
+					  "properties": {
+						"id": { "type": "string", "example": "1111111" },
+						"name": { "type": "string", "example": "Blayne's Pharmacy" },
+						"address": { "type": "string", "example": "123 Main St" },
+						"city": { "type": "string", "example": "Fort Worth" },
+						"state": { "type": "string", "example": "TX" },
+						"zip": { "type": "string", "example": "76244" },
+						"is_active": { "type": "boolean", "example": true },
+						"organization_id": {
+						  "type": "string",
+						  "example": "1A2B3C4D5E6F"
+						},
+						"organization_name": {
+						  "type": "string",
+						  "example": "Blayne"
+						}
+					  }
+					}
+				  }
+				}
+			  }
+			}
         },
         "security": [
           {
@@ -39,10 +66,35 @@
     "/AuthService": {
       "post": {
         "responses": {
-          "default": {
-            "description": "Default response for POST /AuthService"
-          }
-        },
+		  "200": {
+			"description": "Successful authentication, returns an access token.",
+			"content": {
+			  "application/json": {
+				"schema": {
+				  "type": "object",
+				  "properties": {
+					"access_token": {
+					  "type": "string",
+					  "example": "eyJraWQiOiJ...<JWT>...WfQ"
+					},
+					"token_type": {
+					  "type": "string",
+					  "example": "Bearer"
+					},
+					"expires_in": {
+					  "type": "integer",
+					  "example": 3600
+					}
+				  },
+				  "required": ["access_token", "token_type", "expires_in"]
+				}
+			  }
+			}
+		  },
+		  "400": {
+			"description": "Missing or invalid credentials"
+		  }
+		},
         "x-amazon-apigateway-integration": {
           "payloadFormatVersion": "2.0",
           "type": "aws_proxy",
@@ -78,9 +130,22 @@
     "/pharmacies/add": {
       "post": {
         "responses": {
-          "default": {
-            "description": "Default response for POST /pharmacies/add"
-          }
+          "201": {
+			  "description": "Pharmacy successfully added",
+			  "content": {
+				"application/json": {
+				  "schema": {
+					"type": "object",
+					"properties": {
+					  "message": {
+						"type": "string",
+						"example": "Pharmacy added successfully."
+					  }
+					}
+				  }
+				}
+			  }
+			}
         },
         "security": [
           {
@@ -126,44 +191,27 @@
             }
           }
         },
-		"responses": {
-		  "200": {
-			"description": "Successful authentication, returns an access token.",
-			"content": {
-			  "application/json": {
-				"schema": {
-				  "type": "object",
-				  "properties": {
-					"access_token": {
-					  "type": "string",
-					  "example": "eyJraWQiOiJ...<JWT>...WfQ"
-					},
-					"token_type": {
-					  "type": "string",
-					  "example": "Bearer"
-					},
-					"expires_in": {
-					  "type": "integer",
-					  "example": 3600
-					}
-				  },
-				  "required": ["access_token", "token_type", "expires_in"]
-				}
-			  }
-			}
-		  },
-		  "400": {
-			"description": "Missing or invalid credentials"
-		  }
-		}
       }
     },
     "/pharmacies/delete": {
       "post": {
         "responses": {
-          "default": {
-            "description": "Default response for POST /pharmacies/delete"
-          }
+          "201": {
+			  "description": "Pharmacy delected added",
+			  "content": {
+				"application/json": {
+				  "schema": {
+					"type": "object",
+					"properties": {
+					  "message": {
+						"type": "string",
+						"example": "Pharmacy deleted successfully."
+					  }
+					}
+				  }
+				}
+			  }
+			}
         },
         "security": [
           {
@@ -199,9 +247,22 @@
     "/pharmacies/edit": {
       "post": {
         "responses": {
-          "default": {
-            "description": "Default response for POST /pharmacies/edit"
-          }
+          "201": {
+			  "description": "Pharmacy updated successfully.",
+			  "content": {
+				"application/json": {
+				  "schema": {
+					"type": "object",
+					"properties": {
+					  "message": {
+						"type": "string",
+						"example": "Pharmacy updated successfully."
+					  }
+					}
+				  }
+				}
+			  }
+			}
         },
         "security": [
           {
@@ -252,9 +313,30 @@
     "/pharmacies/search": {
       "post": {
         "responses": {
-          "default": {
-            "description": "Default response for POST /pharmacies/search"
-          }
+          "200": {
+			  "description": "Search results matching pharmacy criteria",
+			  "content": {
+				"application/json": {
+				  "schema": {
+					"type": "array",
+					"items": {
+					  "type": "object",
+					  "properties": {
+						"id": { "type": "string", "example": "BLK1234" },
+						"name": { "type": "string", "example": "Test Pharmacy" },
+						"address": { "type": "string", "example": "456 New St." },
+						"city": { "type": "string", "example": "Tucson" },
+						"state": { "type": "string", "example": "AZ" },
+						"zip": { "type": "string", "example": "85701" },
+						"is_active": { "type": "boolean", "example": true },
+						"organization_id": { "type": "string", "example": "66JMYOALJFI3DOLRMT23437AWU7MD6WO" },
+						"organization_name": { "type": "string", "example": "Blayne's Organization" }
+					  }
+					}
+				  }
+				}
+			  }
+			}
         },
         "security": [
           {
