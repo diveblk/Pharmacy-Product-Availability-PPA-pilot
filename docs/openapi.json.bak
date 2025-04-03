@@ -413,9 +413,79 @@
     "/ppa/requestDemo": {
       "post": {
         "responses": {
-          "default": {
-            "description": "Default response for POST /ppa/requestDemo"
-          }
+          "200": {
+			  "description": "Demo PPA request response",
+			  "content": {
+				"application/json": {
+				  "schema": {
+					"type": "object",
+					"properties": {
+					  "MessageType": { "type": "string", "example": "PPA" },
+					  "TransactionDomain": { "type": "string", "example": "PPA" },
+					  "TransactionVersion": { "type": "string", "example": "1.0" },
+					  "Header": {
+						"type": "object",
+						"properties": {
+						  "To": { "type": "string", "example": "NCPDP.Pharmacy." },
+						  "From": { "type": "string", "example": "NCPDP.Prescriber." },
+						  "MessageID": { "type": "string", "example": "e9a2cc7b-dbf7-4e46-994c-3b18482d119e" },
+						  "RelatesToMessageID": { "type": "string", "example": "c823ab54-9749-49c3-a639-54238078eb15" },
+						  "SentTime": { "type": "string", "format": "date-time", "example": "2025-04-03T13:56:35.8379364Z" },
+						  "SenderSoftware": {
+							"type": "object",
+							"properties": {
+							  "Name": { "type": "string", "example": "DemoPPAClient" },
+							  "VersionReleaseNumber": { "type": "string", "example": "1.0.0" }
+							}
+						  }
+						}
+					  },
+					  "Body": {
+						"type": "object",
+						"properties": {
+						  "PPAResponse": {
+							"type": "object",
+							"properties": {
+							  "Approved": { "type": "boolean", "example": true },
+							  "ReasonCode": { "type": "string", "example": "KA" },
+							  "AvailabilityDate": {
+								"type": "string",
+								"format": "date-time",
+								"example": "2025-04-03T13:56:35.8379364Z"
+							  },
+							  "Quantity": {
+								"type": "object",
+								"properties": {
+								  "QuantityValue": { "type": "string", "example": "60" },
+								  "QuantityCodeListQualifier": { "type": "string", "example": "38" },
+								  "QuantityUnitOfMeasure": {
+									"type": "object",
+									"properties": {
+									  "Code": { "type": "string", "example": "C48542" }
+									}
+								  }
+								}
+							  },
+							  "Pharmacy": {
+								"type": "object",
+								"properties": {
+								  "NCPDPID": { "type": "string", "example": "1234567" },
+								  "Name": { "type": "string", "example": "Blayne's Pharmacy" },
+								  "Address": { "type": "string", "example": "123 Main St" },
+								  "City": { "type": "string", "example": "Sierra Vista" },
+								  "State": { "type": "string", "example": "AZ" },
+								  "ZIP": { "type": "string", "example": "85635" }
+								}
+							  }
+							}
+						  }
+						}
+					  }
+					}
+				  }
+				}
+			  }
+			}
         },
         "security": [
           {
