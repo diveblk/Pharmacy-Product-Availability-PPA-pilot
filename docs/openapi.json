@@ -78,10 +78,35 @@
     "/pharmacies/add": {
       "post": {
         "responses": {
-          "default": {
-            "description": "Default response for POST /pharmacies/add"
-          }
-        },
+		  "200": {
+			"description": "Successful authentication, returns an access token.",
+			"content": {
+			  "application/json": {
+				"schema": {
+				  "type": "object",
+				  "properties": {
+					"access_token": {
+					  "type": "string",
+					  "example": "eyJraWQiOiJ...<JWT>...WfQ"
+					},
+					"token_type": {
+					  "type": "string",
+					  "example": "Bearer"
+					},
+					"expires_in": {
+					  "type": "integer",
+					  "example": 3600
+					}
+				  },
+				  "required": ["access_token", "token_type", "expires_in"]
+				}
+			  }
+			}
+		  },
+		  "400": {
+			"description": "Missing or invalid credentials"
+		  }
+		},
         "security": [
           {
             "NCPDPUserAppAutnorizer": []
@@ -126,36 +151,6 @@
             }
           }
         },
-		"responses": {
-		  "200": {
-			"description": "Successful authentication, returns an access token.",
-			"content": {
-			  "application/json": {
-				"schema": {
-				  "type": "object",
-				  "properties": {
-					"access_token": {
-					  "type": "string",
-					  "example": "eyJraWQiOiJ...<JWT>...WfQ"
-					},
-					"token_type": {
-					  "type": "string",
-					  "example": "Bearer"
-					},
-					"expires_in": {
-					  "type": "integer",
-					  "example": 3600
-					}
-				  },
-				  "required": ["access_token", "token_type", "expires_in"]
-				}
-			  }
-			}
-		  },
-		  "400": {
-			"description": "Missing or invalid credentials"
-		  }
-		}
       }
     },
     "/pharmacies/delete": {
