@@ -117,9 +117,6 @@
                   },
                   "zip": {
                     "type": "string"
-                  },
-                  "organization_id": {
-                    "type": "string"
                   }
                 },
                 "required": [
