@@ -49,7 +49,30 @@
           "httpMethod": "POST",
           "uri": "arn:aws:apigateway:us-east-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-2:478698886511:function:AuthService/invocations",
           "connectionType": "INTERNET"
-        }
+        },
+		"requestBody": {
+		  "content": {
+			"application/json": {
+			  "schema": {
+				"type": "object",
+				"properties": {
+				  "username": {
+					"type": "string",
+					"example": "diveblk"
+				  },
+				  "password": {
+					"type": "string",
+					"example": "MySecurePassword123!"
+				  }
+				},
+				"required": [
+				  "username",
+				  "password"
+				]
+			  }
+			}
+		  }
+		}
       }
     },
     "/pharmacies/add": {
