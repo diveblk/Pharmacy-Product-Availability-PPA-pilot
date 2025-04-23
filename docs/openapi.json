@@ -370,46 +370,346 @@
       }
     },
     "/ppa/request": {
-      "post": {
-        "responses": {
-          "default": {
-            "description": "Default response for POST /ppa/request"
-          }
-        },
-        "security": [
-          {
-            "NCPDPUserAppAutnorizer": []
-          }
-        ],
-        "x-amazon-apigateway-integration": {
-          "payloadFormatVersion": "2.0",
-          "type": "aws_proxy",
-          "httpMethod": "POST",
-          "uri": "arn:aws:apigateway:us-east-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-2:478698886511:function:PPAForwarderFunction/invocations",
-          "connectionType": "INTERNET"
-        },
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
+  "post": {
+    "summary": "Submit a full PPARequest and receive a PPAResponse",
+    "security": [
+      {
+        "NCPDPUserAppAutnorizer": []
+      }
+    ],
+    "requestBody": {
+      "description": "Full PPARequest transaction envelope (JSON)",
+      "required": true,
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "MessageType": {
                 "type": "object",
                 "properties": {
-                  "ncpdp_id": {
-                    "type": "string"
+                  "@TransactionDomain": {
+                    "type": "string",
+                    "example": "PPA"
                   },
-                  "product_id": {
-                    "type": "string"
+                  "@TransactionVersion": {
+                    "type": "string",
+                    "example": "1.0"
                   },
-                  "quantity": {
-                    "type": "integer"
+                  "Header": {
+                    "type": "object",
+                    "properties": {
+                      "To": {
+                        "type": "string",
+                        "example": "Pharmacy123"
+                      },
+                      "From": {
+                        "type": "string",
+                        "example": "Prescriber321"
+                      },
+                      "MessageID": {
+                        "type": "string",
+                        "example": "RequestMessageID001"
+                      },
+                      "SentTime": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-01-13T18:13:51.0Z"
+                      },
+                      "SenderSoftware": {
+                        "type": "object",
+                        "properties": {
+                          "SenderSoftwareDeveloper": {
+                            "type": "string",
+                            "example": "SenderSoftwareDeveloper0"
+                          },
+                          "SenderSoftwareProduct": {
+                            "type": "string",
+                            "example": "SenderSoftwareProduct0"
+                          },
+                          "SenderSoftwareVersionRelease": {
+                            "type": "string",
+                            "example": "SenderSoftwareVersionRelease0"
+                          }
+                        },
+                        "required": [
+                          "SenderSoftwareDeveloper",
+                          "SenderSoftwareProduct",
+                          "SenderSoftwareVersionRelease"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "To",
+                      "From",
+                      "MessageID",
+                      "SentTime",
+                      "SenderSoftware"
+                    ]
+                  },
+                  "Body": {
+                    "type": "object",
+                    "properties": {
+                      "PPARequest": {
+                        "type": "object",
+                        "properties": {
+                          "MedicationPrescribed": {
+                            "type": "object",
+                            "properties": {
+                              "DrugDescription": {
+                                "type": "string",
+                                "example": "Lisinopril 40 MG Oral Tablet"
+                              },
+                              "Product": {
+                                "type": "object",
+                                "properties": {
+                                  "DrugCoded": {
+                                    "type": "object",
+                                    "properties": {
+                                      "NDC": {
+                                        "type": "string",
+                                        "example": "00591040901"
+                                      }
+                                    },
+                                    "required": ["NDC"]
+                                  }
+                                },
+                                "required": ["DrugCoded"]
+                              },
+                              "Quantity": {
+                                "type": "object",
+                                "properties": {
+                                  "QuantityValue": {
+                                    "type": "string",
+                                    "example": "90"
+                                  },
+                                  "QuantityCodeListQualifier": {
+                                    "type": "string",
+                                    "example": "38"
+                                  },
+                                  "QuantityUnitOfMeasure": {
+                                    "type": "object",
+                                    "properties": {
+                                      "Code": {
+                                        "type": "string",
+                                        "example": "C48542"
+                                      }
+                                    },
+                                    "required": ["Code"]
+                                  }
+                                },
+                                "required": [
+                                  "QuantityValue",
+                                  "QuantityCodeListQualifier",
+                                  "QuantityUnitOfMeasure"
+                                ]
+                              },
+                              "Substitution": {
+                                "type": "string",
+                                "example": "0"
+                              }
+                            },
+                            "required": [
+                              "DrugDescription",
+                              "Product",
+                              "Quantity",
+                              "Substitution"
+                            ]
+                          },
+                          "PatientPreference": {
+                            "type": "object",
+                            "properties": {
+                              "StateProvince": {
+                                "type": "string",
+                                "example": "TX"
+                              },
+                              "PostalCode": {
+                                "type": "string",
+                                "example": "75001"
+                              }
+                            },
+                            "required": ["StateProvince"]
+                          }
+                        },
+                        "required": ["MedicationPrescribed", "PatientPreference"]
+                      }
+                    },
+                    "required": ["PPARequest"]
                   }
-                }
+                },
+                "required": [
+                  "@TransactionDomain",
+                  "@TransactionVersion",
+                  "Header",
+                  "Body"
+                ]
               }
+            },
+            "required": ["MessageType"]
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "Successful PPAResponse transaction envelope",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "MessageType": {
+                  "type": "object",
+                  "properties": {
+                    "@TransactionDomain": {
+                      "type": "string",
+                      "example": "PPA"
+                    },
+                    "@TransactionVersion": {
+                      "type": "string",
+                      "example": "1.0"
+                    },
+                    "Header": {
+                      "type": "object",
+                      "properties": {
+                        "To": {
+                          "type": "string",
+                          "example": "Prescriber321"
+                        },
+                        "From": {
+                          "type": "string",
+                          "example": "Pharmacy123"
+                        },
+                        "MessageID": {
+                          "type": "string",
+                          "example": "ResponseMessageID001"
+                        },
+                        "RelatesToMessageID": {
+                          "type": "string",
+                          "example": "RequestMessageID001"
+                        },
+                        "SentTime": {
+                          "type": "string",
+                          "format": "date-time",
+                          "example": "2025-01-13T18:13:56.0Z"
+                        },
+                        "SenderSoftware": {
+                          "type": "object",
+                          "properties": {
+                            "SenderSoftwareDeveloper": {
+                              "type": "string",
+                              "example": "SenderSoftwareDeveloper0"
+                            },
+                            "SenderSoftwareProduct": {
+                              "type": "string",
+                              "example": "SenderSoftwareProduct0"
+                            },
+                            "SenderSoftwareVersionRelease": {
+                              "type": "string",
+                              "example": "SenderSoftwareVersionRelease0"
+                            }
+                          },
+                          "required": [
+                            "SenderSoftwareDeveloper",
+                            "SenderSoftwareProduct",
+                            "SenderSoftwareVersionRelease"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "To",
+                        "From",
+                        "MessageID",
+                        "RelatesToMessageID",
+                        "SentTime",
+                        "SenderSoftware"
+                      ]
+                    },
+                    "Body": {
+                      "type": "object",
+                      "properties": {
+                        "PPAResponse": {
+                          "type": "object",
+                          "properties": {
+                            "Response": {
+                              "type": "object",
+                              "properties": {
+                                "Approved": {
+                                  "type": "object",
+                                  "properties": {
+                                    "ReasonCode": {
+                                      "type": "string",
+                                      "example": "KA"
+                                    },
+                                    "Quantity": {
+                                      "type": "object",
+                                      "properties": {
+                                        "QuantityValue": {
+                                          "type": "string",
+                                          "example": "90"
+                                        },
+                                        "QuantityCodeListQualifier": {
+                                          "type": "string",
+                                          "example": "38"
+                                        },
+                                        "QuantityUnitOfMeasure": {
+                                          "type": "object",
+                                          "properties": {
+                                            "Code": {
+                                              "type": "string",
+                                              "example": "C48542"
+                                            }
+                                          },
+                                          "required": ["Code"]
+                                        }
+                                      },
+                                      "required": [
+                                        "QuantityValue",
+                                        "QuantityCodeListQualifier",
+                                        "QuantityUnitOfMeasure"
+                                      ]
+                                    },
+                                    "AvailabilityDate": {
+                                      "type": "string",
+                                      "format": "date-time",
+                                      "example": "2025-01-17T14:30:00.0Z"
+                                    }
+                                  },
+                                  "required": ["ReasonCode"]
+                                }
+                              },
+                              "required": ["Approved"]
+                            }
+                          },
+                          "required": ["Response"]
+                        }
+                      },
+                      "required": ["PPAResponse"]
+                    }
+                  },
+                  "required": [
+                    "@TransactionDomain",
+                    "@TransactionVersion",
+                    "Header",
+                    "Body"
+                  ]
+                }
+              },
+              "required": ["MessageType"]
             }
           }
         }
       }
     },
+    "x-amazon-apigateway-integration": {
+      "payloadFormatVersion": "2.0",
+      "type": "aws_proxy",
+      "httpMethod": "POST",
+      "uri": "arn:aws:apigateway:us-east-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-2:478698886511:function:PPAForwarderFunction/invocations",
+      "connectionType": "INTERNET"
+    }
+  }
+},
     "/ppa/requestDemo": {
       "post": {
         "responses": {
